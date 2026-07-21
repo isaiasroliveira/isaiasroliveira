@@ -6,6 +6,11 @@
 # Requires: gh (authenticated with repo + read:org), jq
 set -euo pipefail
 
+if [[ -n "${CI:-}" && -z "${GH_TOKEN:-}" ]]; then
+  echo "GH_TOKEN is empty — set the LANGS_TOKEN secret to a classic PAT with 'repo' + 'read:org'." >&2
+  exit 1
+fi
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 README="$ROOT/README.md"
 RAW="$(mktemp)"
